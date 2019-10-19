@@ -59,7 +59,6 @@ func fetchAlbumDetails(timeOutCtx context.Context, searchString string, albumCha
 	albums := json.UnmarshalAlbums(respBytes)
 	albumChan <- albums
 	log.Println("fetching albums done", albums)
-	close(albumChan)
 }
 
 func fetchBookDetails(timeOutCtx context.Context, searchString string, bookChan chan models.Book) {
@@ -86,7 +85,4 @@ func fetchBookDetails(timeOutCtx context.Context, searchString string, bookChan 
 	}
 	books := json.UnmarshalBooks(respBytes)
 	bookChan <- books
-	log.Println("fetching books done", books)
-	close(bookChan)
-
 }
