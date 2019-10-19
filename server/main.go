@@ -11,6 +11,6 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.GET("/query", handlers.QueryHandler)
+	r.GET("/query/:searchString", handlers.QueryHandler)
 	log.Fatal(r.Run())
 }
