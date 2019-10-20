@@ -15,7 +15,7 @@ var Conf models.Config
 
 func main() {
 	Conf = json.UnmarshalConfig()
-	r := gin.Default()
-	r.GET("/query/:searchString", handlers.QueryHandler)
-	log.Fatal(r.Run())
+	router := gin.Default()
+	router.GET("/query/:searchString", handlers.QueryHandler)
+	log.Fatal(router.Run())
 }

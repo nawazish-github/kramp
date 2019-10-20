@@ -16,8 +16,9 @@ func QueryHandler(c *gin.Context) {
 		})
 	}
 
-	simpleExec := executor.SimpleExecutor{}
-	response := simpleExec.Fetch(searchString)
+	var exec executor.IExecutor
+	exec = &executor.SimpleExecutor{}
+	response := exec.Fetch(searchString)
 	//ToDo: might have to cache here:
 	c.JSON(200, response)
 }
