@@ -30,7 +30,7 @@ func QueryHandler(ginContext *gin.Context) {
 }
 
 func NoRouteHandler(ginContext *gin.Context) {
-	ginContext.JSON(404, gin.H{"message": "Check URL: /query/queryString"})
+	ginContext.JSON(404, gin.H{"message": "Check URL and/or HTTP method type: /query/queryString" + " " + ginContext.Request.Method})
 }
 
 func handleCachingIfRequired(response *models.Response) {
