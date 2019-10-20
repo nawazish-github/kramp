@@ -18,7 +18,7 @@ func (simpleExec *SimpleExecutor) Fetch(searchString string) models.Response {
 	log.Println("Inside Simple Executor")
 
 	backGroundCtx := context.Background()
-	timeOutCtx, cancel := context.WithTimeout(backGroundCtx, 100*time.Millisecond)
+	timeOutCtx, cancel := context.WithTimeout(backGroundCtx, 1*time.Minute)
 	defer cancel()
 	albumChan := make(chan models.Album)
 	bookChan := make(chan models.Book)
@@ -52,13 +52,12 @@ func fetchAlbumDetails(timeOutCtx context.Context, searchString string, albumCha
 	}
 	respBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println("Failed to call ", constants.GOOGLE_BOOKS_API)
+		log.Println("Failed to call ", constants.ITUNES_API+"term="+searchString+"&&entity=album")
 		log.Println(err)
 		return
 	}
 	albums := json.UnmarshalAlbums(respBytes)
 	albumChan <- albums
-	log.Println("fetching albums done", albums)
 }
 
 func fetchBookDetails(timeOutCtx context.Context, searchString string, bookChan chan models.Book) {
@@ -79,7 +78,7 @@ func fetchBookDetails(timeOutCtx context.Context, searchString string, bookChan 
 	}
 	respBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println("Failed to call ", constants.GOOGLE_BOOKS_API)
+		log.Println("Failed to call ", constants.GOOGLE_BOOKS_API+"q="+searchString)
 		log.Println(err)
 		return
 	}

@@ -1,0 +1,5 @@
+{
+    "maxBooks": 5,
+    "maxAlbums": 5,
+    "maxTimeout": 1
+}
