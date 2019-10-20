@@ -38,6 +38,7 @@ func (simpleExec *SimpleExecutor) Fetch(searchString string) models.Response {
 func fetchAlbumDetails(timeOutCtx context.Context, searchString string, albumChan chan models.Album) {
 	defer func() {
 		if r := recover(); r != nil {
+			log.Fatal(r)
 			albumChan <- models.Album{}
 		}
 		close(albumChan)
@@ -61,12 +62,14 @@ func fetchAlbumDetails(timeOutCtx context.Context, searchString string, albumCha
 		return
 	}
 	albums := json.UnmarshalAlbums(respBytes)
+	log.Println("Total albums fetched: ", albums.ResultCount)
 	albumChan <- albums
 }
 
 func fetchBookDetails(timeOutCtx context.Context, searchString string, bookChan chan models.Book) {
 	defer func() {
 		if r := recover(); r != nil {
+			log.Fatal(r)
 			bookChan <- models.Book{}
 		}
 		close(bookChan)
@@ -91,5 +94,6 @@ func fetchBookDetails(timeOutCtx context.Context, searchString string, bookChan 
 		return
 	}
 	books := json.UnmarshalBooks(respBytes)
+	log.Println("Total books fetched: ", books.TotalItems)
 	bookChan <- books
 }
