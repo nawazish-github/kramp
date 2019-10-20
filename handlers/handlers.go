@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"log"
+	"time"
 
 	"github.com/nawazish-github/kramp/models"
 
@@ -21,11 +22,15 @@ func QueryHandler(ginContext *gin.Context) {
 
 	var exec executor.IExecutor
 	exec = &executor.SimpleExecutor{}
+	startTime := time.Now()
+
 	response := exec.Fetch(searchString)
 
 	handleCachingIfRequired(&response)
 	boundUpperlimitOfResponseIfRequired(&response)
 	krampResponses := mapToKrampResponse(&response)
+	log.Println("Total time taken to serve: ", time.Since(startTime))
+
 	ginContext.JSON(200, krampResponses)
 }
 
