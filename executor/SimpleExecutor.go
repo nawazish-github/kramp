@@ -37,8 +37,12 @@ func (simpleExec *SimpleExecutor) Fetch(searchString string) models.Response {
 
 func fetchAlbumDetails(timeOutCtx context.Context, searchString string, albumChan chan models.Album) {
 	defer func() {
+		if r := recover(); r != nil {
+			albumChan <- models.Album{}
+		}
 		close(albumChan)
 	}()
+
 	req, err := http.NewRequest(http.MethodGet, constants.ITUNES_API+"term="+searchString+"&&entity=album", nil)
 	if err != nil {
 		log.Println("albun req formation failed", err)
@@ -62,8 +66,12 @@ func fetchAlbumDetails(timeOutCtx context.Context, searchString string, albumCha
 
 func fetchBookDetails(timeOutCtx context.Context, searchString string, bookChan chan models.Book) {
 	defer func() {
+		if r := recover(); r != nil {
+			bookChan <- models.Book{}
+		}
 		close(bookChan)
 	}()
+
 	req, err := http.NewRequest(http.MethodGet, constants.GOOGLE_BOOKS_API+"q="+searchString, nil)
 	if err != nil {
 		log.Println("book req formation failed", err)
