@@ -24,7 +24,7 @@ func QueryHandler(ginContext *gin.Context) {
 	response := exec.Fetch(searchString)
 
 	handleCachingIfRequired(&response)
-	boundResponseIfRequired(&response)
+	boundUpperlimitResponseIfRequired(&response)
 
 	ginContext.JSON(200, response)
 }
@@ -42,7 +42,7 @@ func handleCachingIfRequired(response *models.Response) {
 	}
 }
 
-func boundResponseIfRequired(response *models.Response) {
+func boundUpperlimitResponseIfRequired(response *models.Response) {
 	config := models.GetConfigInstance()
 	if len(response.Books.Items) > config.MaxBooks {
 		response.Books.Items = response.Books.Items[0:config.MaxBooks]
