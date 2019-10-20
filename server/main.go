@@ -17,5 +17,6 @@ func main() {
 	Conf = json.UnmarshalConfig()
 	router := gin.Default()
 	router.GET("/query/:searchString", handlers.QueryHandler)
+	router.NoRoute(handlers.NoRouteHandler)
 	log.Fatal(router.Run())
 }

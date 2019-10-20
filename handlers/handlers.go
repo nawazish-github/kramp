@@ -29,6 +29,10 @@ func QueryHandler(ginContext *gin.Context) {
 	ginContext.JSON(200, krampResponses)
 }
 
+func NoRouteHandler(ginContext *gin.Context) {
+	ginContext.JSON(404, gin.H{"message": "Check URL: /query/queryString"})
+}
+
 func handleCachingIfRequired(response *models.Response) {
 	c := cache.GetCacheInstance()
 	if len(response.Albums.Results) > 0 && len(response.Books.Items) > 0 {
