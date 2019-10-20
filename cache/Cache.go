@@ -24,8 +24,8 @@ func (c *Cache) UpdateCache(response *models.Response) {
 
 	tmpCache := GetCacheInstance()
 
-	respBooks := response.Books.Items[0 : maxBooks+1]
-	respAlbums := response.Albums.Results[0 : maxAlbums+1]
+	respBooks := response.Books.Items[0:maxBooks]
+	respAlbums := response.Albums.Results[0:maxAlbums]
 
 	tmpCache.Books.Items = respBooks
 	tmpCache.Albums.Results = respAlbums

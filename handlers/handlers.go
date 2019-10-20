@@ -24,9 +24,9 @@ func QueryHandler(ginContext *gin.Context) {
 	response := exec.Fetch(searchString)
 
 	handleCachingIfRequired(&response)
-	boundUpperlimitResponseIfRequired(&response)
-
-	ginContext.JSON(200, response)
+	boundUpperlimitOfResponseIfRequired(&response)
+	krampResponses := mapToKrampResponse(&response)
+	ginContext.JSON(200, krampResponses)
 }
 
 func handleCachingIfRequired(response *models.Response) {
@@ -42,12 +42,37 @@ func handleCachingIfRequired(response *models.Response) {
 	}
 }
 
-func boundUpperlimitResponseIfRequired(response *models.Response) {
+func boundUpperlimitOfResponseIfRequired(response *models.Response) {
 	config := models.GetConfigInstance()
 	if len(response.Books.Items) > config.MaxBooks {
 		response.Books.Items = response.Books.Items[0:config.MaxBooks]
 	}
 	if len(response.Albums.Results) > config.MaxAlbums {
 		response.Albums.Results = response.Albums.Results[0:config.MaxAlbums]
+	}
+}
+
+func mapToKrampResponse(response *models.Response) models.KrampResponses {
+	var krampResponses []models.KrampResponse
+	for _, book := range response.Books.Items {
+		krampResponse := models.KrampResponse{
+			Title:       book.VolumeInfo.Tile,
+			Protagonist: book.VolumeInfo.Authors,
+			IsAlbum:     false,
+		}
+		krampResponses = append(krampResponses, krampResponse)
+	}
+
+	for _, album := range response.Albums.Results {
+		krampResponse := models.KrampResponse{
+			Title:       album.CollectionName,
+			Protagonist: []string{album.ArtistName},
+			IsAlbum:     true,
+		}
+		krampResponses = append(krampResponses, krampResponse)
+	}
+
+	return models.KrampResponses{
+		Responses: krampResponses,
 	}
 }
